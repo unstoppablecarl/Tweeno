@@ -1,22 +1,27 @@
 {
-    "name": "tweeno",
-    "version": "1.0.0",
-    "description": "Tweeno is a refactored and improved version of [Tween.js](http://github.com/sole/tween.js) A super simple, fast and easy to use tweening engine which incorporates optimized Robert Penner's equations.",
-    "main": "index.js",
-    "scripts": {
-        "test": "./node_modules/mocha/bin/_mocha -R spec ./test/*.js",
-        "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.js --report html -- -R spec"
-    },
-    "author": "unstoppablecarlolsen@gmail.com",
-    "keywords": [
-        "tween",
-        "interpolation"
-    ],
-    "license": "MIT",
-    "devDependencies": {
-        "grunt": "~0.4.4",
-        "grunt-browserify": "~2.0.7",
-        "grunt-contrib-uglify": "~0.4.0",
-        "mocha": "~1.18.2"
-    }
+  "name": "tweeno",
+  "version": "1.0.0",
+  "description": "Tweeno is a refactored and improved version of [Tween.js](http://github.com/sole/tween.js) A super simple, fast and easy to use tweening engine which incorporates optimized Robert Penner's equations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/_mocha -R spec ./test/*.js",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.js --report html -- -R spec"
+  },
+  "author": "unstoppablecarlolsen@gmail.com",
+  "keywords": [
+    "tween",
+    "interpolation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-browserify": "~2.0.7",
+    "grunt-contrib-uglify": "~0.4.0",
+    "mocha": "~1.18.2",
+    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "~2.10.0"
+  },
+  "dependencies": {
+
+  }
 }
