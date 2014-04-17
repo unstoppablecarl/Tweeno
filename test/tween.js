@@ -442,6 +442,188 @@ describe('Tween', function() {
 
             });
 
+            it("onRepeat()", function() {
+                var expectedProgress = 0,
+                    expectedCounter = 0,
+                    counter = 0,
+                    obj = {},
+                    settings = {
+                        to: {
+                            x: 2
+                        },
+                        duration: 100,
+                        repeat: 2,
+                        onRepeat: function(target, thisTween, progress) {
+                            counter++;
+                            assert.deepEqual(target, obj);
+                            assert.deepEqual(tween, thisTween);
+                            assert.deepEqual(progress, expectedProgress);
+                            assert.deepEqual(counter, expectedCounter);
+                        }
+                    },
+                    tween = new Tween(obj, settings);
+
+                tween.start(0);
+
+                expectedProgress = 0;
+                expectedCounter = 0;
+                tween.update(0);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                tween.update(100);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                tween.update(150);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                tween.update(200);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                tween.update(250);
+            });
+
+            it("onRepeat() with queue", function() {
+                var queue = new Queue(),
+                    expectedProgress = 0,
+                    expectedCounter = 0,
+                    counter = 0,
+                    obj = {},
+                    settings = {
+                        to: {
+                            x: 2
+                        },
+                        duration: 100,
+                        repeat: 2,
+                        onRepeat: function(target, thisTween, progress) {
+                            counter++;
+                            assert.deepEqual(target, obj);
+                            assert.deepEqual(tween, thisTween);
+                            assert.deepEqual(progress, expectedProgress);
+                            assert.deepEqual(counter, expectedCounter);
+                        }
+                    },
+                    tween = new Tween(obj, settings);
+
+                queue.add(tween);
+                queue.start(0);
+
+                expectedProgress = 0;
+                expectedCounter = 0;
+                queue.update(0);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                queue.update(100);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                queue.update(150);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                queue.update(200);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                queue.update(250);
+            });
+
+            it("onYoYo()", function() {
+                var expectedProgress = 0,
+                    expectedCounter = 0,
+                    counter = 0,
+                    obj = {},
+                    settings = {
+                        to: {
+                            x: 2
+                        },
+                        duration: 100,
+                        yoyo: true,
+                        repeat: 2,
+                        onYoYo: function(target, thisTween, progress) {
+                            counter++;
+                            assert.deepEqual(target, obj);
+                            assert.deepEqual(tween, thisTween);
+                            assert.deepEqual(progress, expectedProgress);
+                            assert.deepEqual(counter, expectedCounter);
+                        }
+                    },
+                    tween = new Tween(obj, settings);
+
+                tween.start(0);
+
+                expectedProgress = 0;
+                expectedCounter = 0;
+                tween.update(0);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                tween.update(100);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                tween.update(150);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                tween.update(200);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                tween.update(250);
+            });
+
+            it("onYoYo() with queue", function() {
+                var queue = new Queue(),
+                    expectedProgress = 0,
+                    expectedCounter = 0,
+                    counter = 0,
+                    obj = {},
+                    settings = {
+                        to: {
+                            x: 2
+                        },
+                        duration: 100,
+                        yoyo: true,
+                        repeat: 2,
+                        onYoYo: function(target, thisTween, progress) {
+                            counter++;
+                            assert.deepEqual(target, obj);
+                            assert.deepEqual(tween, thisTween);
+                            assert.deepEqual(progress, expectedProgress);
+                            assert.deepEqual(counter, expectedCounter);
+                        }
+                    },
+                    tween = new Tween(obj, settings);
+
+                queue.add(tween);
+                queue.start(0);
+
+                expectedProgress = 0;
+                expectedCounter = 0;
+                queue.update(0);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                queue.update(100);
+
+                expectedCounter = 1;
+                expectedProgress = 1;
+                queue.update(150);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                queue.update(200);
+
+                expectedCounter = 2;
+                expectedProgress = 1;
+                queue.update(250);
+            });
+
             it("onComplete()", function() {
                 var counter = 0,
                     expectedProgress = 1,
@@ -635,7 +817,6 @@ describe('Tween', function() {
 
         describe('yoyo', function() {
 
-
             it("repeat 1 happens once", function() {
                 var queue = new Queue(),
                     obj = {
@@ -671,6 +852,7 @@ describe('Tween', function() {
                 queue.update(225);
                 assert.deepEqual(obj.x, 0);
             });
+
             it("repeat Infinity happens forever", function() {
                 var queue = new Queue(),
                     obj = {
