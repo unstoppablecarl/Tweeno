@@ -1,4 +1,7 @@
+
 [![Build Status](https://travis-ci.org/unstoppablecarl/Tweeno.svg?branch=master)](https://travis-ci.org/unstoppablecarl/Tweeno)
+
+[![Coverage Status](https://coveralls.io/repos/unstoppablecarl/Tweeno/badge.png)](https://coveralls.io/r/unstoppablecarl/Tweeno)
 
 Tweeno.js
 ========

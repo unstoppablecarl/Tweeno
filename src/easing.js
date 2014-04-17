@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 var Easing = {
     Linear: {
         None: function(k) {

@@ -1,4 +1,5 @@
 'use strict';
+/* istanbul ignore next */
 var Utils = {
     Linear: function(p0, p1, t) {
         return(p1 - p0) * t + p0;

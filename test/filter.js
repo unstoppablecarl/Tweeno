@@ -1,12 +1,9 @@
-var assert = require("assert");
+var assert = require("assert"),
     Tween = require('../src/tween.js'),
     Queue = require('../src/queue.js'),
     Easing = require('../src/easing.js'),
     Interpolation = require('../src/interpolation.js'),
     Filter = require('../src/filter.js');
-
-var Tween = require('../src/tween.js'),
-    Queue = require('../src/queue.js');
 
 global.window = {};
 describe('Filter', function() {
