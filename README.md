@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/unstoppablecarl/Tweeno.svg?branch=master)](https://travis-ci.org/unstoppablecarl/Tweeno)
+
 Tweeno.js
 ========
 
@@ -23,7 +25,6 @@ A super simple, fast and easy to use tweening engine which incorporates optimize
 
 - String value filtering ( `rgba(1,2,3,1)` ) with interpolation support
 - npm, commonJS, AMD module loading
-
 
 ## Tween
 
@@ -80,7 +81,6 @@ An object containing the settings for the tween object.
     };
 ```
 
-
 Name           | Type       | Default                        | Description
 ---------------|------------|--------------------------------|-----------------------------------------------
 from           | Object     | `{}`                           | Starting state applied to the target when the tween starts *(when tween.start() is called)*
@@ -101,13 +101,11 @@ filters        | Object     | `false`                        | list of Tweeno.Fi
 
 All callback functions are given the same paramaters.  `onStart`, `onUpdate`, `onRepeat`, `onYoYo`
 
-
 Name           | Type       | Description
 ---------------|------------|-----------------
 target         | Object     | The target object of the tween calling the function
 tween          | Object     | The Tweeno.Tween object calling the function
 easedProgress  | Number     | Number between 0 and 1 showing current progress of the tween *(easing function is already applied)*
-
 
 ```javascript
     var settings = {
@@ -142,7 +140,6 @@ Any of the properties on the settings object can also be assigned or accessed di
     tween.start();
 
 ```
-
 
 #### Tween.start()
 
@@ -232,7 +229,6 @@ Calls `tween.start()` on all Tweens in the queue.
 
 - The tween **start time** is set automatically. Optionally, pass a timestamp to be used as the **start time** `queue.start(time)` it will be passed to each `tween.start(time)` in the queue.
 
-
 #### Queue.update()
 Calls `tween.update()` on all Tweens in the queue.
 
@@ -275,7 +271,6 @@ Name           | Type       | Default         | Description
 placeholder    | String     | `%`             | Placeholder for numeric values within the string
 format         | String     | `rgba(%,%,%,%)` | Format of the string to be filtered with placeholders where numeric values are to be placed
 
-
 #### Filter.stringToArray(str)
 
 Converts a string to an array of numeric values.
@@ -312,7 +307,6 @@ Converts an array of numeric values to a string matching the `format` of the fil
     var str = filter.arrayToString(arr); // 'rgba(5,6,7,1)'
 ```
 
-
 #### Filter Use Example
 
 ```javascript
@@ -345,7 +339,6 @@ Converts an array of numeric values to a string matching the `format` of the fil
     queue.add(tween);
 
     queue.start();
-
 ```
 
 ### Quickstart Example ###
@@ -410,7 +403,6 @@ Converts an array of numeric values to a string matching the `format` of the fil
     animate();
 ```
 
-
 #### Easing Function Reference
 
 - Tweeno.Easing.Linear.None
@@ -455,12 +447,8 @@ Converts an array of numeric values to a string matching the `format` of the fil
 - Tweeno.Easing.Bounce.Out
 - Tweeno.Easing.Bounce.InOut
 
-
 #### Interpolation Function Reference
 
 - Tweeno.Interpolation.Linear
 - Tweeno.Interpolation.Bezier
 - Tweeno.Interpolation.CatmullRom
-
-
-
