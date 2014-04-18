@@ -1,33 +1,126 @@
 
-[![Build Status](https://travis-ci.org/unstoppablecarl/Tweeno.svg?branch=master)](https://travis-ci.org/unstoppablecarl/Tweeno)
+[![Build Status](https://travis-ci.org/unstoppablecarl/Tweeno.svg?branch=master)](https://travis-ci.org/unstoppablecarl/Tweeno) [![Coverage Status](https://coveralls.io/repos/unstoppablecarl/Tweeno/badge.png)](https://coveralls.io/r/unstoppablecarl/Tweeno)
 
-[![Coverage Status](https://coveralls.io/repos/unstoppablecarl/Tweeno/badge.png)](https://coveralls.io/r/unstoppablecarl/Tweeno)
+# Tweeno.js
 
-Tweeno.js
-========
+A super simple, fast and easy to use **tweening engine** which incorporates optimized Robert Penner's equations.
 
-#### Javascript Tweening Engine ####
+**Tweeno was originally created by refactoring [Tween.js](http://github.com/sole/tween.js)** ( [More about why in the wiki](https://github.com/unstoppablecarl/Tweeno/wiki/Why-Refactor-Tween.js%3F) )
 
-Tweeno is a refactored and improved version of [Tween.js](http://github.com/sole/tween.js)
+## Overview
 
-A super simple, fast and easy to use tweening engine which incorporates optimized Robert Penner's equations.
+Tweeno is a simple tweening engine designed to be used in html5 game development.
 
+Library objects
 
-**Refactored**
+- **Queue** manages an array of tween objects updating them every update loop.
+- **Tween** handles the change of a target object's numeric property values over a span of time.
+- **Filter** assists in tweening numeric values within strings. For example `rgba(10,20,30,1)`.
+- **Easing** equations for easing
+- **Interpolation** equations for interpolation
 
-- Simplified and better performing api
-- Extendable Objects with prototype properties and methods
-- Separation of Tween and Queue objects
-- Portability of config data via settings object
-- Exposed property values
-- More consistent callbacks with more params passed
-- Documentation
-- Unit Tests
+## Example Usage
 
-**New Features**
+```javascript
+    /** nodejs / browserify **/
+    var Tween = require('tweeno').Tween,
+        Queue = require('tweeno').Queue,
+        Easing = require('tweeno').Easing;
 
-- String value filtering ( `rgba(1,2,3,1)` ) with interpolation support
-- npm, commonJS, AMD module loading
+    /** browser **/
+    var Tween = Tweeno.Tween,
+        Queue = Tweeno.Queue,
+        Easing = Tweeno.Easing;
+
+    // creating a div to tween
+    var targetDiv = document.createElement('div');
+        targetDiv.style.cssText = 'position: absolute; left: 50px; top: 300px; font-size: 50px';
+        document.body.appendChild(targetDiv);
+
+    // target object with internal state to be tweened
+    var target = {
+        x: 0,
+        y: 0,
+        div: targetDiv,
+        // updates the div object state every update loop
+        update: function(){
+            var innerHTML = '',
+            innerHTML += 'x: ' + Math.round(this.x);
+
+            this.div.innerHTML = innerHTML;
+            this.div.style.left = this.x + 'px';
+        }
+    };
+
+    // tween settings
+    var settings = {
+        // set when starting tween
+        from: {
+            x: 50,
+            y: 0
+        },
+        // state to tween to
+        to: {
+            x: 400,
+            y: 20
+        },
+        // 2 seconds
+        duration: 2000,
+        // repeat 2 times
+        repeat: 2,
+        // do it smoothly
+        easing: Easing.Elastic.InOut,
+    };
+
+    var queue = new Queue(),
+        tween = new Tween(target, settings);
+
+    // add the tween to the queue
+    queue.add(tween);
+
+    // start the queue
+    queue.start();
+
+    // update loop
+    var animate = function() {
+        requestAnimationFrame(animate);
+        // update the queued tweens
+        queue.update();
+        // update the target object state
+        target.update();
+    };
+
+    // start the update loop
+    animate();
+```
+
+## Installation
+
+**Note:** Tweeno has no dependencies
+
+**Nodejs / Browserify**
+
+`$ npm install tweeno --save`
+
+```javascript
+var Tweeno        = require('tweeno'),
+    Queue         = Tweeno.Queue,
+    Tween         = Tweeno.Tween,
+    Filter        = Tweeno.Filter,
+    Easing        = Tweeno.Easing,
+    Interpolation = Tweeno.Interpolation;
+```
+
+**Browser**
+```javascript
+var Queue         = Tweeno.Queue,
+    Tween         = Tweeno.Tween,
+    Filter        = Tweeno.Filter,
+    Easing        = Tweeno.Easing,
+    Interpolation = Tweeno.Interpolation;
+```
+
+# Documentation
 
 ## Tween
 
@@ -344,67 +437,24 @@ Converts an array of numeric values to a string matching the `format` of the fil
     queue.start();
 ```
 
-### Quickstart Example ###
 
-```javascript
+### Changed from [Tween.js](http://github.com/sole/tween.js)
 
-    /** node js **/
-    var Tween = require('tweeno').Tween,
-        Queue = require('tweeno').Queue,
-        Easing = require('tweeno').Easing;
+**Refactored**
 
-    /** browser **/
-    var Tween = Tweeno.Tween,
-        Queue = Tweeno.Queue,
-        Easing = Tweeno.Easing;
+- Simplified and better performing api
+- Extendable Objects with prototype properties and methods
+- Separation of Tween and Queue objects
+- Portability of config data via settings object
+- Exposed property values
+- More consistent callbacks with more params passed
+- Documentation
+- Unit Tests
 
-    var targetDiv = document.createElement('div');
-        targetDiv.style.cssText = 'position: absolute; left: 50px; top: 300px; font-size: 50px';
-        document.body.appendChild(targetDiv);
+**New Features**
 
-    var target = {
-        x: 0,
-        y: 0,
-        div: targetDiv,
-        update: function(){
-            var repeatNumber = settings.repeat + 1 - tween.repeat;
-            this.div.innerHTML = 'x: ' + Math.round(this.x);
-            this.div.innerHTML += '<br>';
-            this.div.innerHTML += 'repeat #' + repeatNumber;
-            this.div.style.left = this.x + 'px';
-        }
-    };
-
-    var settings = {
-        // set when starting tween
-        from: {
-            x: 50,
-            y: 0
-        },
-        to: {
-            x: 400,
-            y: 20
-        },
-        duration: 2000,
-        repeat: 2,
-        easing: Easing.Elastic.InOut,
-
-    };
-
-    var tween = new Tween(target, settings);
-    var queue = new Queue();
-
-    queue.add(tween);
-    queue.start();
-
-    var animate = function() {
-        requestAnimationFrame(animate);
-        queue.update();
-        target.update();
-    };
-
-    animate();
-```
+- String value filtering ( `rgba(1,2,3,1)` ) with interpolation support
+- npm, commonJS, AMD module loading
 
 #### Easing Function Reference
 
