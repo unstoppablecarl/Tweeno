@@ -1099,7 +1099,7 @@ describe('Tween', function() {
                 tween2Started = false,
                 tween2Completed = false;
 
-            tween.chained.push(tween2);
+            tween.chained = [tween2];
 
             queue.add(tween);
             assert.deepEqual(tweenStarted, false);
@@ -1137,7 +1137,7 @@ describe('Tween', function() {
                     numChainedStarted++;
                 }
             };
-
+            tween.chained = [];
             for(var i = 0; i < numChained; i++){
                 var chained = new Tween({}, chainedSettings);
                 tween.chained.push(chained);
@@ -1179,8 +1179,8 @@ describe('Tween', function() {
 
             queue.add(tween1);
 
-            tween1.chained.push(tween2);
-            tween2.chained.push(tween1);
+            tween1.chained = [tween2];
+            tween2.chained = [tween1];
 
             assert.deepEqual(target.x, 0);
 
