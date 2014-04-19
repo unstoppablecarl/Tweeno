@@ -126,56 +126,53 @@ var Queue         = Tweeno.Queue,
 
 Tween objects manage the state of a target object over a span of time.
 
+- `target` object to tween the state of.
 ```javascript
-    // target object is required, settings object is optional
-    var tween = new Tweeno.Tween(target, settings);
+// example
+  var target = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10
+  };
 ```
-
-#### Target Param
-
-Any object with properties to be tweened.
-
+- `settings` *(optional)* contains tween settings.
 ```javascript
     // example
-    var target = {
-        x: 0,
-        y: 0,
-        width: 10,
-        height: 10
-    };
+  var settings = {
+      from: {
+          x: 10,
+          y: 10
+      },
+      to: {
+          x: 100,
+          y: 10
+      },
+      duration: 500,
+      repeat: 4,
+      delay: 10
+      yoyo: true,
+
+      easing: Tweeno.Easing.Elastic.InOut,
+      interpolation: Tweeno.Interpolation.Linear,
+
+      chained: [], // array of tweens to be started when this tween is completed
+
+      onStart:        false, // or: function(target, tween, easedProgress){},
+      onYoYo:         false, // or: function(target, tween, easedProgress){},
+      onRepeat:       false, // or: function(target, tween, easedProgress){},
+      onUpdate:       false, // or: function(target, tween, easedProgress){},
+      onComplete:     false, // or: function(target, tween, easedProgress){},
+      filters:        false, // or: function(target, tween, easedProgress){},
+  };
+```
+
+```javascript
+var tween = new Tweeno.Tween(target, settings);
 ```
 
 #### Settings Param
 
-An object containing the settings for the tween object.
-
-```javascript
-    // example
-    var settings = {
-        from: {
-            x: 10,
-            y: 10
-        },
-        to: {
-            x: 100,
-            y: 100
-        },
-        duration: 500,
-        repeat: 4,
-        delay: 10,
-        yoyo: true,
-
-        easing: Tweeno.Easing.Elastic.InOut,
-        interpolation: Tweeno.Interpolation.Linear,
-
-        onStart:        false, // or: function(target, tween, easedProgress){},
-        onYoYo:         false, // or: function(target, tween, easedProgress){},
-        onRepeat:       false, // or: function(target, tween, easedProgress){},
-        onUpdate:       false, // or: function(target, tween, easedProgress){},
-        onComplete:     false, // or: function(target, tween, easedProgress){},
-        filters:        false, // or: function(target, tween, easedProgress){},
-    };
-```
 
 Name           | Type       | Default                        | Description
 ---------------|------------|--------------------------------|-----------------------------------------------
@@ -192,6 +189,7 @@ onUpdate       | Function   | `false`                        | Callback when upd
 onRepeat       | Function   | `false`                        | Callback when repeated *(end of tween)*
 onYoYo         | function   | `false`                        | Callback when tween reversed *(every other repeat cycle)*
 filters        | Object     | `false`                        | list of Tweeno.Filter objects indexed by the target object property name they are applied to *(see more about filters below)*
+chained        | Array      | `false`                        | list of Tween objects to add to the Queue object containing this Tween, when this Tween is complete.
 
 #### Callback Parameters
 
@@ -204,11 +202,11 @@ tween          | Object     | The Tweeno.Tween object calling the function
 easedProgress  | Number     | Number between 0 and 1 showing current progress of the tween *(easing function is already applied)*
 
 ```javascript
-    var settings = {
-        onUpdate: function(target, tween, easedProgress){
-            // onUpdate callback code
-        }
+var settings = {
+    onUpdate: function(target, tween, easedProgress){
+        // onUpdate callback code
     }
+}
 ```
 
 #### Tween Settings After Creation
@@ -216,61 +214,68 @@ easedProgress  | Number     | Number between 0 and 1 showing current progress of
 Any of the properties on the settings object can also be assigned or accessed directly on the tween object. They can be safely modified at any time before start() is called.
 
 ```javascript
-    var target = {
-        x: 0
-    };
+var target = {
+    x: 0
+};
 
-    var settings = {
-        to: {
-            x: 10
-        },
-        repeat: 5
-    };
+var settings = {
+    to: {
+        x: 10
+    },
+    repeat: 5
+};
 
-    var tween = new Tweeno.Tween(target, settings);
+var tween = new Tweeno.Tween(target, settings);
 
-    // set or access any settings properties directly on the tween object before start() is called
-    tween.duration = 500;
-    tween.repeat = false;
-    // start the tween
-    tween.start();
+// set or access any settings properties directly on the tween object before start() is called
+tween.duration = 500;
+tween.repeat = false;
+// start the tween
+tween.start();
 
 ```
+----
+#### Tween.start(startTime)
 
-#### Tween.start()
+Sets the `startTime` and prepares the Tween to begin.
 
-Sets the start time and prepares the tween to begin.
+- `startTime` *(optional)* a timestamp to be used as the Tween  `startTime`.
 
 **Returns:** Tween object instance.
 
 ```javascript
-    var tween = new Tweeno.Tween(target, settings);
+var tween = new Tweeno.Tween(target, settings);
     tween.start();
 ```
-###### When Tween.start() is Called:
+**When Tween.start() is Called:**
 
-- The tween start time is set automatically. Optionally, pass a timestamp to be used as the start time `tween.start(time)`.
-- The `from` object properties are applied to the target *( if set in *`settings.from`* or *`tween.from`* )*.
+- The tween `startTime` is set automatically if none was specified.
+- The `from` object properties are applied to the `target`.
 
-#### Tween.update()
+----
 
-Updates the state of the Tween's target object. Should be called every  `requestAnimationFrame()` *(usually automatically by the Queue object it is added to)*.
+#### Tween.update(currentTime)
 
-**Returns:** `true` if the tween has not completed,  `false` if it has.
+Updates the state of the Tween's `target`. The `currentTime` is compared to the `startTime` to determine the progress of the Tween. `Tween.update()` should be called every `requestAnimationFrame()` update loop. It is typically called by the Queue object containing the Tween via `queue.update()`.
+
+- `currentTime` *(optional)* a timestamp to be used as the tween  **start time**.
+
+**Returns:** `true` if the Tween has not completed,  `false` if it has.
 
 ```javascript
-    var tween = new Tweeno.Tween(target, settings);
-    tween.update();
+var tween = new Tweeno.Tween(target, settings);
+tween.update();
 ```
 
 ###### When Tween.update() is Called:
 
-- The tween compares the **current time** to the start time to determine the progress of the tween. Optionally, pass a timestamp to be used as the **current time**. `tween.update(time)`.
 - The `onStart` callback is called ( if not already called ).
 - The `onUpdate` callback is called.
 - The `onRepeat` callback is called ( if the end of the tween has been reached and the tween is set to repeat ).
 - The `onYoYo` callback is called ( if the end of the tween has been reached and the tween is set to repeat  and yoyo).
 - The `onComplete` callback is called ( if the end of the tween has been reached ).
+
+----
 
 #### Tween.getDuration()
 
@@ -288,84 +293,136 @@ Queues manages an array of Tweens. Tween objects are added to the queue. The Que
     var tweens = [] // optional
     var queue = new Tweeno.Queue(tweens);
 ```
-#### Queue.add()
+
+----
+
+#### Queue.add(tween)
 Adds a tween object to the queue.
 
+- `tween` Tween to add
+
 **Returns:** Queue object instance.
 
 ```javascript
-    var queue = new Tweeno.Queue();
-    var tween = new Tweeno.Tween(target, settings);
-    queue.add(tween);
+var queue = new Tweeno.Queue();
+var tween = new Tweeno.Tween(target, settings);
+queue.add(tween);
 ```
 
-#### Queue.remove()
+-----
+
+#### Queue.remove(tween)
 Removes a tween object from the queue.
 
+- `tween` Tween to remove
+
 **Returns:** Queue object instance.
 
 ```javascript
-    queue.remove(tween);
+queue.remove(tween);
 ```
-Setting `tween.remove = true` will remove the tween from any queue it is in during the next `queue.update()`.
+**Note:** Setting `tween.remove = true` will remove the tween from any queue it is in during the next `queue.update()`.
 
-#### Queue.start()
-Calls `tween.start()` on all Tweens in the queue.
+----
+
+#### Queue.start(startTime)
+Calls `tween.start()` on all Tweens in the queue, passing the `startTime` to each `tween.start(startTime)` in the Queue.
+
+- `startTime` *(optional)* a timestamp to be used as the `startTime` for all Tweens in the Queue.
 
 **Returns:** Queue object instance.
 
 ```javascript
-    var queue = new Tweeno.Queue();
-    var tween = new Tweeno.Tween(target, settings);
-    queue.add(tween);
-    queue.start();
+var queue = new Tweeno.Queue();
+var tween = new Tweeno.Tween(target, settings);
+queue.add(tween);
+queue.start();
 ```
 
 ###### When Queue.start() is Called:
 
-- The tween **start time** is set automatically. Optionally, pass a timestamp to be used as the **start time** `queue.start(time)` it will be passed to each `tween.start(time)` in the queue.
+- The tween `startTime` is set automatically if none was specified.
 
-#### Queue.update()
-Calls `tween.update()` on all Tweens in the queue.
+----
 
-**Returns:** `true` if the Queue has any tweens or `false`.
+#### Queue.update(currentTime)
+
+Calls `tween.update()` on all Tweens in the queue, passing the `currentTime` to each `tween.update(currentTime)` in the Queue.
+
+- `currentTime` *(optional)* a timestamp to be used as the `tween.update(currentTime)`.
+
+
+**Returns:** `true` if the Queue has any Tweens or `false`.
 
 ```javascript
-    var queue = new Tweeno.Queue();
-    var tween = new Tweeno.Tween(target, settings);
-    queue.add(tween);
-    queue.start();
-    queue.update();
+var queue = new Tweeno.Queue();
+var tween = new Tweeno.Tween(target, settings);
+queue.add(tween);
+queue.start();
+queue.update();
 ```
 
 ###### When Queue.update() is Called:
 
-- The queue calls `queue.update(time)` on all tweens in the queue. Optionally, pass a timestamp to be used as the **current time**. It will be passed to each `tween.update(time)`.
 - Tweens that are completed or have `tween.remove = true` are removed from the queue.
+
+----
 
 ## Filter
 
 Filters allow Tween objects to tween the numeric values within a string.
 
+- `settings` *(optional)* contains filter settings.
 ```javascript
-    var filter = new Tweeno.Filter(settings);
+var settings = {
+      placeholder: '%',
+      format: 'rgba(%,%,%,%)'
+};
+```
+
+```javascript
+var filter = new Tweeno.Filter(settings);
 ```
 
 #### Settings Param
 
 An object containing the settings for the tween object
 
-```javascript
-    var settings = {
-        placeholder: '%',
-        format: 'rgba(%,%,%,%)'
-    };
-```
+
 
 Name           | Type       | Default         | Description
 ---------------|------------|-----------------|----------------------------------------------
 placeholder    | String     | `%`             | Placeholder for numeric values within the string
 format         | String     | `rgba(%,%,%,%)` | Format of the string to be filtered with placeholders where numeric values are to be placed
+
+#### Usage
+
+```javascript
+var queue = new Queue(),
+    filter = new Filter({
+        placeholder: '%',
+        format: 'rgba(%,%,%,%)'
+    }),
+    target = {
+        color: 'rgba(255,0,0,0)'
+    },
+    settings = {
+        to: {
+            color: 'rgba(200,100,150,1)'
+        },
+        filters: {
+            color: filter
+        },
+        duration: 500
+    },
+    tween = new Tween(target, settings);
+
+queue.add(tween);
+queue.start();
+
+```
+
+----
 
 #### Filter.stringToArray(str)
 
@@ -385,6 +442,8 @@ Converts a string to an array of numeric values.
     var arr = filter.stringToArray(str); // [5, 6, 7, 1]
 ```
 
+----
+
 #### Filter.arrayToString(arr)
 
 Converts an array of numeric values to a string matching the `format` of the filter.
@@ -401,40 +460,6 @@ Converts an array of numeric values to a string matching the `format` of the fil
     var filter = new Tweeeno.Filter(settings);
     var arr = [5, 6, 7, 1];
     var str = filter.arrayToString(arr); // 'rgba(5,6,7,1)'
-```
-
-#### Filter Use Example
-
-```javascript
-
-    var target = {
-        color: 'rgba(0,0,0,1)'
-    };
-
-    var filterSettings = {
-        placeholder: '%',
-        format: 'rgba(%,%,%,%)'
-    };
-
-    var colorFilter = new Tweeno.Filter(filterSettings);
-
-    var tweenSettings = {
-        to: {
-            color: 'rgba(10,20,30,1)'
-        },
-        duration: 500,
-        filters: {
-            color: colorFilter
-        }
-    };
-
-    var tween = new Tweeno.Tween(target, tweenSettings);
-
-    var queue = new Tweeno.Queue();
-
-    queue.add(tween);
-
-    queue.start();
 ```
 
 

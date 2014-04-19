@@ -1,5 +1,5 @@
 // 'use strict';
-var assert = require("assert"),
+var assert = require('assert'),
     Tween = require('../src/tween.js'),
     Queue = require('../src/queue.js'),
     Interpolation = require('../src/interpolation.js'),
@@ -31,7 +31,8 @@ describe('Tween', function() {
                 interpolation: function() {},
                 onStart: function() {},
                 onUpdate: function() {},
-                onComplete: function() {}
+                onComplete: function() {},
+                chained: []
             };
             var tween = new Tween({
                 x: 0
@@ -68,7 +69,7 @@ describe('Tween', function() {
             assert.deepEqual(tween.start(), tween);
         });
 
-        it("window.performance", function() {
+        it('window.performance', function() {
             var obj = {
                 x: 1
             },
@@ -103,7 +104,7 @@ describe('Tween', function() {
     describe('update()', function() {
 
 
-        it("ignore multiple update() calls if not started", function() {
+        it('ignore multiple update() calls if not started', function() {
             var obj = {
                 x: 1
             },
@@ -124,7 +125,7 @@ describe('Tween', function() {
             assert.deepEqual(obj.x, 1);
         });
 
-        it("Existing property", function() {
+        it('Existing property', function() {
             var obj = {
                 x: 1
             },
@@ -145,7 +146,7 @@ describe('Tween', function() {
             assert.deepEqual(obj.x, 2);
         });
 
-        it("Existing property using from param", function() {
+        it('Existing property using from param', function() {
             var obj = {
                 x: 0
             },
@@ -170,7 +171,7 @@ describe('Tween', function() {
         });
 
 
-        it("Non-existing property", function() {
+        it('Non-existing property', function() {
             var obj = {
                 x: 1
             },
@@ -187,7 +188,7 @@ describe('Tween', function() {
             assert.deepEqual(obj.y, 0);
         });
 
-        it("Non-null property", function() {
+        it('Non-null property', function() {
             var obj = {
                 x: 1
             },
@@ -206,7 +207,7 @@ describe('Tween', function() {
             assert(obj.x !== null);
         });
 
-        it("Function property", function() {
+        it('Function property', function() {
             var my_function = function() {};
             var obj = {
                 x: my_function
@@ -225,7 +226,7 @@ describe('Tween', function() {
             assert(obj.x === my_function, 'function value was changed by tween');
         });
 
-        it("Boolean property", function() {
+        it('Boolean property', function() {
             var obj = {
                 x: true
             },
@@ -241,11 +242,11 @@ describe('Tween', function() {
 
             tween.update(1000);
 
-            assert(typeof obj.x === "boolean", 'boolean value was changed by tween to different type');
+            assert(typeof obj.x === 'boolean', 'boolean value was changed by tween to different type');
             assert(obj.x, 'boolean value was changed by tween');
         });
 
-        it("Null property", function() {
+        it('Null property', function() {
             var obj = {
                 x: null
             },
@@ -272,7 +273,7 @@ describe('Tween', function() {
 
         });
 
-        it("Undefined property", function() {
+        it('Undefined property', function() {
             var obj = {},
                 settings = {
                     to: {
@@ -299,7 +300,7 @@ describe('Tween', function() {
 
         });
 
-        it("with delay", function() {
+        it('with delay', function() {
             var obj = {
                 x: 1
             },
@@ -324,13 +325,13 @@ describe('Tween', function() {
 
             tween.update(1500);
 
-            assert.equal(obj.x, 2, "Tween finishes when expected");
+            assert.equal(obj.x, 2, 'Tween finishes when expected');
 
         });
 
-        describe("Callbacks", function() {
+        describe('callbacks', function() {
 
-            it("onStart()", function() {
+            it('onStart()', function() {
                 var counter = 0,
                     obj = {},
                     settings = {
@@ -339,7 +340,7 @@ describe('Tween', function() {
                         },
                         duration: 1000,
                         onStart: function() {
-                            assert(true, "onStart callback is called");
+                            assert(true, 'onStart callback is called');
                             counter++;
                         }
                     },
@@ -353,11 +354,11 @@ describe('Tween', function() {
                 assert.deepEqual(counter, 1);
                 tween.update(500);
 
-                assert.deepEqual(counter, 1, "onStart callback is not called again");
+                assert.deepEqual(counter, 1, 'onStart callback is not called again');
 
             });
 
-            it("onUpdate()", function() {
+            it('onUpdate()', function() {
                 var expectedProgress = 0,
                     expectedCounter = 0,
                     counter = 0,
@@ -396,7 +397,7 @@ describe('Tween', function() {
                 tween.update(1000);
             });
 
-            it("onUpdate() with queue", function() {
+            it('onUpdate() with queue', function() {
                 var queue = new Queue(),
                     expectedProgress = 0,
                     expectedCounter = 0,
@@ -442,7 +443,7 @@ describe('Tween', function() {
 
             });
 
-            it("onRepeat()", function() {
+            it('onRepeat()', function() {
                 var expectedProgress = 0,
                     expectedCounter = 0,
                     counter = 0,
@@ -486,7 +487,7 @@ describe('Tween', function() {
                 tween.update(250);
             });
 
-            it("onRepeat() with queue", function() {
+            it('onRepeat() with queue', function() {
                 var queue = new Queue(),
                     expectedProgress = 0,
                     expectedCounter = 0,
@@ -532,7 +533,7 @@ describe('Tween', function() {
                 queue.update(250);
             });
 
-            it("onYoYo()", function() {
+            it('onYoYo()', function() {
                 var expectedProgress = 0,
                     expectedCounter = 0,
                     counter = 0,
@@ -577,7 +578,7 @@ describe('Tween', function() {
                 tween.update(250);
             });
 
-            it("onYoYo() with queue", function() {
+            it('onYoYo() with queue', function() {
                 var queue = new Queue(),
                     expectedProgress = 0,
                     expectedCounter = 0,
@@ -624,7 +625,7 @@ describe('Tween', function() {
                 queue.update(250);
             });
 
-            it("onComplete()", function() {
+            it('onComplete()', function() {
                 var counter = 0,
                     expectedProgress = 1,
                     obj = {},
@@ -664,7 +665,7 @@ describe('Tween', function() {
 
             });
 
-            it("onComplete() with queue", function() {
+            it('onComplete() with queue', function() {
                 var queue = new Queue(),
                     counter = 0,
                     expectedProgress = 1,
@@ -708,9 +709,9 @@ describe('Tween', function() {
 
         });
 
-        describe("repeat", function() {
+        describe('repeat', function() {
 
-            it("Tween does not repeat by default", function() {
+            it('Tween does not repeat by default', function() {
                 var counter = 0,
                     obj = {
                         x: 0
@@ -743,7 +744,7 @@ describe('Tween', function() {
             });
 
 
-            it("Single repeat happens only once", function() {
+            it('Single repeat happens only once', function() {
                 var counter = 0,
                     obj = {
                         x: 0
@@ -779,7 +780,7 @@ describe('Tween', function() {
 
             });
 
-            it("Infinity repeat happens forever", function() {
+            it('Infinity repeat happens forever', function() {
                 var obj = {
                     x: 0
                 },
@@ -817,7 +818,7 @@ describe('Tween', function() {
 
         describe('yoyo', function() {
 
-            it("repeat 1 happens once", function() {
+            it('repeat 1 happens once', function() {
                 var queue = new Queue(),
                     obj = {
                         x: 0
@@ -853,7 +854,7 @@ describe('Tween', function() {
                 assert.deepEqual(obj.x, 0);
             });
 
-            it("repeat Infinity happens forever", function() {
+            it('repeat Infinity happens forever', function() {
                 var queue = new Queue(),
                     obj = {
                         x: 0
@@ -893,7 +894,7 @@ describe('Tween', function() {
     });
 
     describe('interpolation', function() {
-        it("default", function() {
+        it('default', function() {
             var obj = {
                 x: 0,
                 y: 0
@@ -932,7 +933,7 @@ describe('Tween', function() {
         });
     });
     describe('filter', function() {
-        it("default", function() {
+        it('default', function() {
             var list = new Queue(),
                 obj = {
 
@@ -964,7 +965,7 @@ describe('Tween', function() {
             assert.equal(obj.color, settings.to.color);
         });
 
-        it("interpolated", function() {
+        it('interpolated', function() {
             var obj = {
                 r: 0,
                 color: 'rgba(0,0,0,0)',
@@ -1014,7 +1015,7 @@ describe('Tween', function() {
             assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
         });
 
-        it("interpolated repeat", function() {
+        it('interpolated repeat', function() {
             var obj = {
                 r: 0,
                 color: 'rgba(0,0,0,0)',
@@ -1063,6 +1064,158 @@ describe('Tween', function() {
             tween.update(100);
             r = obj.r;
             assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+        });
+    });
+
+     describe('chained', function() {
+        it('chain one tween', function() {
+            var queue = new Queue(),
+                tweenStarted = false,
+                tweenCompleted = false,
+
+                tweenSettings = {
+                    duration: 1000,
+                    onStart: function() {
+                        tweenStarted = true;
+                    },
+                    onComplete: function() {
+                        tweenCompleted = true;
+                    },
+                },
+                tween = new Tween({}, tweenSettings),
+                tween2Settings = {
+                    duration: 1000,
+                    onStart: function() {
+                        assert.deepEqual(tweenStarted, true);
+                        assert.deepEqual(tweenCompleted, true);
+                        assert.deepEqual(tween2Started, false);
+                        tween2Started = true;
+                    },
+                    onComplete: function() {
+                        tweenCompleted = true;
+                    },
+                },
+                tween2 = new Tween({}, tween2Settings),
+                tween2Started = false,
+                tween2Completed = false;
+
+            tween.chained.push(tween2);
+
+            queue.add(tween);
+            assert.deepEqual(tweenStarted, false);
+            assert.deepEqual(tween2Started, false);
+
+            queue.start(0);
+            queue.update(0);
+
+            assert.deepEqual(tweenStarted, true);
+            assert.deepEqual(tween2Started, false);
+
+            queue.update(1000);
+
+            assert.deepEqual(tweenCompleted, true);
+
+            queue.update(1001);
+
+            assert.deepEqual(tween2Started, true, 'tween2 is automatically started by tween');
+
+        });
+
+        it('multiple', function() {
+            var queue = new Queue(),
+                tweenSettings = {
+                    duration: 1000,
+                },
+                tween = new Tween({}, tweenSettings),
+                chainedTweens = [],
+                numChained = 3,
+                numChainedStarted = 0;
+
+            var chainedSettings = {
+                duration: 1000,
+                onStart: function(){
+                    numChainedStarted++;
+                }
+            };
+
+            for(var i = 0; i < numChained; i++){
+                var chained = new Tween({}, chainedSettings);
+                tween.chained.push(chained);
+            }
+
+            assert.deepEqual(numChainedStarted, 0);
+
+            queue.add(tween);
+            queue.start(0);
+            queue.update(0);
+            queue.update(1000);
+            queue.update(1001);
+
+            assert.deepEqual(numChainedStarted, numChained, 'All chained tweens have been started');
+
+        });
+
+        it('allows endless loops', function() {
+
+            var queue = new Queue(),
+                target = {
+                    x: 0
+                },
+                tween1Settings = {
+                    to: {
+                        x: 100
+                    },
+                    duration: 1000
+                },
+                tween1 = new Tween(target, tween1Settings),
+                tween2Settings = {
+                    to: {
+                        x: 0
+                    },
+                    duration: 1000
+                },
+                tween2 = new Tween(target, tween2Settings);
+
+
+            queue.add(tween1);
+
+            tween1.chained.push(tween2);
+            tween2.chained.push(tween1);
+
+            assert.deepEqual(target.x, 0);
+
+            // x == 0
+            queue.start(0);
+            queue.update(0);
+
+            assert.deepEqual(target.x, 0);
+
+            queue.update(500);
+            assert.deepEqual(target.x, 50);
+
+            queue.update(1000);
+            assert.deepEqual(queue.tweens.indexOf(tween1), -1, 'tween1 removed');
+            assert.notDeepEqual(queue.tweens.indexOf(tween2), -1, 'tween2 added');
+            assert.deepEqual(target.x, 100);
+
+            queue.update(1500);
+            assert.deepEqual(target.x, 50);
+
+            // ... and back again (x == 0)
+
+            queue.update(2000);
+            assert.deepEqual(queue.tweens.indexOf(tween2), -1, 'tween2 removed');
+            assert.notDeepEqual(queue.tweens.indexOf(tween1), -1, 'tween1 added');
+            assert.deepEqual(target.x, 0);
+
+            queue.update(2500);
+            assert.deepEqual(target.x, 50);
+
+            queue.update(3000);
+            assert.deepEqual(queue.tweens.indexOf(tween1), -1, 'tween1 removed');
+            assert.notDeepEqual(queue.tweens.indexOf(tween2), -1, 'tween2 added');
+            assert.deepEqual(target.x, 100); // and x == 100 again
+
         });
     });
 

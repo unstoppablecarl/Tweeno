@@ -40,9 +40,20 @@ Queue.prototype.update = function(time) {
         }
     }
     while(i < this.tweens.length) {
-        var tween = this.tweens[i];
-        if(tween.remove || !tween.update(time)) {
+        var tween = this.tweens[i],
+            update = tween.update(time);
+        if(tween.remove || !update) {
             this.tweens.splice(i, 1);
+            // if end of tween without removing manually
+            if(!tween.remove && tween.chained){
+                var len = tween.chained.length;
+                for (i = 0; i < len; i++) {
+                    var chainedTween = tween.chained[i];
+                    // add and start any chained tweens
+                    this.add(chainedTween);
+                    chainedTween.start(time);
+                }
+            }
         } else {
             i++;
         }

@@ -10,6 +10,7 @@ global.Tweeno = {
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./src/easing.js":2,"./src/filter.js":3,"./src/interpolation.js":4,"./src/queue.js":5,"./src/tween.js":6}],2:[function(require,module,exports){
+/* istanbul ignore next */
 var Easing = {
     Linear: {
         None: function(k) {
@@ -334,6 +335,7 @@ module.exports = Filter;
 
 },{}],4:[function(require,module,exports){
 'use strict';
+/* istanbul ignore next */
 var Utils = {
     Linear: function(p0, p1, t) {
         return(p1 - p0) * t + p0;
@@ -361,6 +363,7 @@ var Utils = {
         return(2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
     }
 };
+/* istanbul ignore next */
 module.exports = {
     Linear: function(v, k) {
         var m = v.length - 1,
@@ -441,9 +444,20 @@ Queue.prototype.update = function(time) {
         }
     }
     while(i < this.tweens.length) {
-        var tween = this.tweens[i];
-        if(tween.remove || !tween.update(time)) {
+        var tween = this.tweens[i],
+            update = tween.update(time);
+        if(tween.remove || !update) {
             this.tweens.splice(i, 1);
+            // if end of tween without removing manually
+            if(!tween.remove && tween.chained){
+                var len = tween.chained.length;
+                for (i = 0; i < len; i++) {
+                    var chainedTween = tween.chained[i];
+                    // add and start any chained tweens
+                    this.add(chainedTween);
+                    chainedTween.start(time);
+                }
+            }
         } else {
             i++;
         }
@@ -509,6 +523,8 @@ var Tween = function(object, settings) {
     this.easing = settings.easing || Easing.Linear.None;
     this.interpolation = settings.interpolation || Interpolation.Linear;
 
+    this.chained = settings.chained || false;
+
     this.onStart = settings.onStart || false;
     this.onUpdate = settings.onUpdate || false;
     this.onComplete = settings.onComplete || false;
@@ -563,7 +579,6 @@ Tween.prototype.start = function(time) {
         // if this property has a filter
         if(filter) {
             filter.start(this._object[property], toProperty);
-
         }
 
         this.to[property] = toProperty;

@@ -46,6 +46,8 @@ var Tween = function(object, settings) {
     this.easing = settings.easing || Easing.Linear.None;
     this.interpolation = settings.interpolation || Interpolation.Linear;
 
+    this.chained = settings.chained || false;
+
     this.onStart = settings.onStart || false;
     this.onUpdate = settings.onUpdate || false;
     this.onComplete = settings.onComplete || false;
@@ -100,7 +102,6 @@ Tween.prototype.start = function(time) {
         // if this property has a filter
         if(filter) {
             filter.start(this._object[property], toProperty);
-
         }
 
         this.to[property] = toProperty;
