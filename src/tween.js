@@ -46,7 +46,7 @@ var Tween = function(object, settings) {
     this.easing = settings.easing || Easing.Linear.None;
     this.interpolation = settings.interpolation || Interpolation.Linear;
 
-    this.chained = settings.chained || false;
+    this.chained = settings.chained || [];
 
     this.onStart = settings.onStart || false;
     this.onUpdate = settings.onUpdate || false;
