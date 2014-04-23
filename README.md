@@ -5,7 +5,9 @@
 
 A super simple, fast and easy to use **tweening engine** which incorporates optimized Robert Penner's equations.
 
-**Tweeno was originally created by refactoring [Tween.js](http://github.com/sole/tween.js)** ( [More about why in the wiki](https://github.com/unstoppablecarl/Tweeno/wiki/Why-Refactor-Tween.js%3F) )
+**Tweeno was originally created by refactoring [Tween.js](http://github.com/sole/tween.js)**
+
+[Why I refactored Tween.js](https://github.com/unstoppablecarl/Tweeno/wiki/Why-Refactor-Tween.js%3F)
 
 ## Overview
 
@@ -124,7 +126,9 @@ var Queue         = Tweeno.Queue,
 
 ## Tween
 
-Tween objects manage the state of a target object over a span of time.
+Tween objects manage the state of a `target` object over a span of time.
+
+#### Tween(target, settings)
 
 - `target` object to tween the state of.
 ```javascript
@@ -187,13 +191,14 @@ interpolation  | Function   | `Tweeno.Interpolation.Linear`  | Interpolation fun
 onStart        | Function   | `false`                        | Callback when started
 onUpdate       | Function   | `false`                        | Callback when updated
 onRepeat       | Function   | `false`                        | Callback when repeated *(end of tween)*
-onYoYo         | function   | `false`                        | Callback when tween reversed *(every other repeat cycle)*
+onYoYo         | Function   | `false`                        | Callback when tween reversed *(end of tween, every other repeat cycle)*
+onComplete     | Function   | `false`                        | Callback when completed
 filters        | Object     | `false`                        | list of Tweeno.Filter objects indexed by the target object property name they are applied to *(see more about filters below)*
 chained        | Array      | `false`                        | list of Tween objects to add to the Queue object containing this Tween, when this Tween is complete.
 
 #### Callback Parameters
 
-All callback functions are given the same paramaters.  `onStart`, `onUpdate`, `onRepeat`, `onYoYo`
+All callback functions are given the same paramaters.  `onStart`, `onUpdate`, `onRepeat`, `onYoYo`, `onComplete`
 
 Name           | Type       | Description
 ---------------|------------|-----------------
@@ -287,7 +292,12 @@ tween.update();
 ```
 
 ## Queue
-Queues manages an array of Tweens. Tween objects are added to the queue. The Queue calls the tween.update() method of tweens added to it every `requestAnimationFrame()` loop. Completed tweens are automatically removed from the queue.
+
+A Queue object manages an array of Tweens. The Queue calls the `tween.update()` method of the tweens it contains every `requestAnimationFrame()` loop. Completed tweens are automatically removed from the queue.
+
+#### Queue(tweens)
+
+- `tweens` *(optional)* array of tweens to add.
 
 ```javascript
     var tweens = [] // optional
@@ -371,6 +381,8 @@ queue.update();
 ## Filter
 
 Filters allow Tween objects to tween the numeric values within a string.
+
+## Filter(settings)
 
 - `settings` *(optional)* contains filter settings.
 ```javascript
