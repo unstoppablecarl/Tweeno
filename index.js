@@ -1,4 +1,4 @@
-global.Tweeno = {
+module.exports = {
     Tween: require('./src/tween.js'),
     Filter: require('./src/filter.js'),
     Queue: require('./src/queue.js'),

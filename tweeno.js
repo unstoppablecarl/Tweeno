@@ -1,15 +1,19 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-global.Tweeno = {
-    Tween: require('./src/tween.js'),
-    Filter: require('./src/filter.js'),
-    Queue: require('./src/queue.js'),
-    Interpolation: require('./src/interpolation.js'),
-    Easing: require('./src/easing.js')
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Tweeno=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+// global.Tweeno = {
+//     Tween: require('./src/tween.js'),
+//     Filter: require('./src/filter.js'),
+//     Queue: require('./src/queue.js'),
+//     Interpolation: require('./src/interpolation.js'),
+//     Easing: require('./src/easing.js')
+// };
+module.exports = {
+    Tween: _dereq_('./src/tween.js'),
+    Filter: _dereq_('./src/filter.js'),
+    Queue: _dereq_('./src/queue.js'),
+    Interpolation: _dereq_('./src/interpolation.js'),
+    Easing: _dereq_('./src/easing.js')
 };
-
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./src/easing.js":2,"./src/filter.js":3,"./src/interpolation.js":4,"./src/queue.js":5,"./src/tween.js":6}],2:[function(require,module,exports){
+},{"./src/easing.js":2,"./src/filter.js":3,"./src/interpolation.js":4,"./src/queue.js":5,"./src/tween.js":6}],2:[function(_dereq_,module,exports){
 /* istanbul ignore next */
 var Easing = {
     Linear: {
@@ -175,7 +179,7 @@ var Easing = {
     }
 };
 module.exports = Easing;
-},{}],3:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 'use strict';
 
 var Filter = function(settings) {
@@ -333,7 +337,7 @@ Filter.prototype.getUpdatedValue = function(easedProgress, interpolation) {
 
 module.exports = Filter;
 
-},{}],4:[function(require,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 'use strict';
 /* istanbul ignore next */
 var Utils = {
@@ -401,7 +405,7 @@ module.exports = {
     }
 };
 
-},{}],5:[function(require,module,exports){
+},{}],5:[function(_dereq_,module,exports){
 'use strict';
 
 var Queue = function(tweens) {
@@ -474,10 +478,10 @@ Queue.prototype.start = function(time) {
 
 module.exports = Queue;
 
-},{}],6:[function(require,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 'use strict';
-var Easing = require('./easing.js'),
-    Interpolation = require('./interpolation.js');
+var Easing = _dereq_('./easing.js'),
+    Interpolation = _dereq_('./interpolation.js');
 /**
     settings = {
         from: false,
@@ -682,4 +686,6 @@ Tween.prototype.getDuration = function() {
 
 module.exports = Tween;
 
-},{"./easing.js":2,"./interpolation.js":4}]},{},[1]);
+},{"./easing.js":2,"./interpolation.js":4}]},{},[1])
+(1)
+});;

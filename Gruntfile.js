@@ -8,7 +8,9 @@ module.exports = function(grunt) {
                     'tweeno.js': ['index.js'],
                 },
                 options: {
-                    // transform: ['coffeeify']
+                    bundleOptions: {
+                        standalone: 'Tweeno'
+                    }
                 }
             }
         },
