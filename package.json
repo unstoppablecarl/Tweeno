@@ -1,10 +1,9 @@
 {
   "name": "tweeno",
-  "version": "1.1.0",
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/unstoppablecarl/Tweeno"
+  "version": "1.1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unstoppablecarl/Tweeno"
   },
   "description": "Tweeno is a refactored and improved version of [Tween.js](http://github.com/sole/tween.js) A super simple, fast and easy to use tweening engine which incorporates optimized Robert Penner's equations.",
   "main": "index.js",
@@ -24,9 +23,8 @@
     "grunt-contrib-uglify": "~0.4.0",
     "mocha": "~1.18.2",
     "mocha-lcov-reporter": "0.0.1",
-    "coveralls": "~2.10.0"
+    "coveralls": "~2.10.0",
+    "chai": "~1.9.1"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

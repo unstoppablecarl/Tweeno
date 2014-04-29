@@ -8,7 +8,8 @@ var assert = require("assert"),
 global.window = {};
 describe('Filter', function() {
     var settings = {
-        format: 'rgba(%,%,%,%)'
+        format: 'rgba(%,%,%,%)',
+        placeholderTypes: ['float', 'float', 'float', 'float'],
     };
     describe('constructor()', function() {
         it('instanceof', function() {
@@ -32,7 +33,7 @@ describe('Filter', function() {
 
         it('default', function() {
             var settings = {
-                    format: '%test(%,%,%)'
+                    format: 'test(%,%,%, %)'
                 },
                 f = new Filter(settings),
                 testData = [
@@ -118,7 +119,8 @@ describe('Filter', function() {
 
         it('default', function() {
             var settings = {
-                    format: 'test(%,%,%,%)'
+                    format: 'test(%,%,%,%)',
+                    placeholderTypes: ['float', 'float', 'float', 'float'],
                 },
                 f = new Filter(settings);
 
@@ -144,7 +146,8 @@ describe('Filter', function() {
 
         it('starts with number', function() {
             var settings = {
-                    format: '%test(%,%,%)'
+                    format: '%test(%,%,%)',
+                    placeholderTypes: ['float', 'float', 'float', 'float'],
                 },
                 f = new Filter(settings),
                 testData = [
@@ -169,7 +172,8 @@ describe('Filter', function() {
 
         it('ends with number', function() {
             var settings = {
-                    format: 'test(%,%,%)%'
+                    format: 'test(%,%,%)%',
+                    placeholderTypes: ['float', 'float', 'float', 'float'],
                 },
                 f = new Filter(settings),
                 testData = [

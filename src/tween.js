@@ -148,7 +148,7 @@ Tween.prototype.update = function(time) {
         }
         // handle interpolated end values
         else if(end instanceof Array) {
-            newValue = this.interpolation(easedProgress, end);
+            newValue = this.interpolation(end, easedProgress);
         }
 
         if(typeof newValue !== 'undefined') {

@@ -5,6 +5,8 @@ var Filter = function(settings) {
     this.format = settings.format || this.format;
 
     this.placeholder = settings.placeholder || this.placeholder;
+    // prevent reference
+    this.placeholderTypes = settings.placeholderTypes || [].concat(this.placeholderTypes);
     this._formatArray = this.format.split(this.placeholder);
 };
 
@@ -12,6 +14,7 @@ Filter.prototype._formatArray = null;
 
 Filter.prototype.format = 'rgba(%,%,%,%)';
 Filter.prototype.placeholder = '%';
+Filter.prototype.placeholderTypes = ['int', 'int', 'int', 'float'];
 
 Filter.prototype.to = null;
 Filter.prototype.from = null;
@@ -47,6 +50,10 @@ Filter.prototype.arrayToString = function(array) {
         i;
 
     for(i = 0; i < len; i++) {
+        if(this.placeholderTypes[i] === 'int'){
+            array[i] = Math.round(array[i]);
+        }
+
         out.push(formatArray[i]);
         out.push(array[i]);
     }

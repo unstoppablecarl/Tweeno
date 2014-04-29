@@ -1,5 +1,5 @@
 // 'use strict';
-var assert = require("assert"),
+var assert = require("chai").assert,
     Tween = require('../src/tween.js'),
     Queue = require('../src/queue.js');
 

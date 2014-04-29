@@ -1,5 +1,5 @@
 // 'use strict';
-var assert = require('assert'),
+var assert = require("chai").assert,
     Tween = require('../src/tween.js'),
     Queue = require('../src/queue.js'),
     Interpolation = require('../src/interpolation.js'),
@@ -945,7 +945,9 @@ describe('Tween', function() {
                     },
                     duration: 100,
                     filters: {
-                        color: new Filter()
+                        color: new Filter({
+                            placeholderTypes: ['float', 'float', 'float', 'float']
+                        })
                     },
                 },
                 tween = new Tween(obj, settings);
@@ -981,7 +983,9 @@ describe('Tween', function() {
                     },
                     duration: 100,
                     filters: {
-                        color: new Filter()
+                        color: new Filter({
+                            placeholderTypes: ['float', 'float', 'float', 'float']
+                        })
                     },
                     interpolation: Interpolation.Bezier
                 },
@@ -991,10 +995,11 @@ describe('Tween', function() {
             tween.start(0);
 
             tween.update(0);
+
             r = obj.r;
             assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
-
             tween.update(25);
+
             r = obj.r;
             assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
 
@@ -1015,6 +1020,59 @@ describe('Tween', function() {
             assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
         });
 
+        it('interpolated int', function() {
+            var obj = {
+                r: 0,
+                color: 'rgba(0,0,0,0)',
+            },
+                settings = {
+                    to: {
+                        r: [0, 1, 10, 5],
+                        color: [
+                            'rgba(1,0,0,0)',
+                            'rgba(10,0,0,0)',
+                            'rgba(5,0,0,0)',
+                        ]
+                    },
+                    duration: 100,
+                    filters: {
+                        color: new Filter({
+                            placeholderTypes: ['int', 'int', 'int', 'int']
+                        })
+                    },
+                    interpolation: Interpolation.Bezier
+                },
+                tween = new Tween(obj, settings);
+
+            var r;
+            tween.start(0);
+
+            tween.update(0);
+
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+            tween.update(25);
+
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+
+            tween.update(50);
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+
+            tween.update(55);
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+
+            tween.update(80);
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+
+            tween.update(100);
+            r = Math.round(obj.r);
+            assert.equal(obj.color, 'rgba(' + r + ',0,0,0)');
+        });
+
         it('interpolated repeat', function() {
             var obj = {
                 r: 0,
@@ -1032,7 +1090,9 @@ describe('Tween', function() {
                     repeat: 2,
                     duration: 100,
                     filters: {
-                        color: new Filter()
+                        color: new Filter({
+                            placeholderTypes: ['float', 'float', 'float', 'float']
+                        })
                     },
                     interpolation: Interpolation.Bezier
                 },
