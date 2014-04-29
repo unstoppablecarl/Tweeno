@@ -1,11 +1,4 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Tweeno=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-// global.Tweeno = {
-//     Tween: require('./src/tween.js'),
-//     Filter: require('./src/filter.js'),
-//     Queue: require('./src/queue.js'),
-//     Interpolation: require('./src/interpolation.js'),
-//     Easing: require('./src/easing.js')
-// };
 module.exports = {
     Tween: _dereq_('./src/tween.js'),
     Filter: _dereq_('./src/filter.js'),
@@ -298,12 +291,12 @@ Filter.prototype.getIndexedInterpolationData = function(toArray) {
 
 Filter.prototype.getUpdatedValue = function(easedProgress, interpolation) {
     var end = this.arrayTo,
+        newInterpolatedArray = [],
         out, i, len;
 
     //check if interpolated array
     if(end[0] instanceof Array) {
         var interpolatedArray = this.arrayToIndexedInterpolated;
-
         /**
         convert from
             interpolatedArray = [
@@ -316,10 +309,11 @@ Filter.prototype.getUpdatedValue = function(easedProgress, interpolation) {
         **/
         len = interpolatedArray.length;
         for(i = 0; i < len; i++) {
-            interpolatedArray[i] = interpolation(interpolatedArray[i], easedProgress);
-        }
 
-        out = this.arrayToString(interpolatedArray);
+
+            newInterpolatedArray[i] = interpolation(interpolatedArray[i], easedProgress);
+        }
+        out = this.arrayToString(newInterpolatedArray);
         return out;
     }
 

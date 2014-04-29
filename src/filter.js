@@ -116,12 +116,12 @@ Filter.prototype.getIndexedInterpolationData = function(toArray) {
 
 Filter.prototype.getUpdatedValue = function(easedProgress, interpolation) {
     var end = this.arrayTo,
+        newInterpolatedArray = [],
         out, i, len;
 
     //check if interpolated array
     if(end[0] instanceof Array) {
         var interpolatedArray = this.arrayToIndexedInterpolated;
-
         /**
         convert from
             interpolatedArray = [
@@ -134,10 +134,11 @@ Filter.prototype.getUpdatedValue = function(easedProgress, interpolation) {
         **/
         len = interpolatedArray.length;
         for(i = 0; i < len; i++) {
-            interpolatedArray[i] = interpolation(interpolatedArray[i], easedProgress);
-        }
 
-        out = this.arrayToString(interpolatedArray);
+
+            newInterpolatedArray[i] = interpolation(interpolatedArray[i], easedProgress);
+        }
+        out = this.arrayToString(newInterpolatedArray);
         return out;
     }
 
