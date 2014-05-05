@@ -205,10 +205,11 @@ Name           | Type       | Description
 target         | Object     | The target object of the tween calling the function
 tween          | Object     | The Tweeno.Tween object calling the function
 easedProgress  | Number     | Number between 0 and 1 showing current progress of the tween *(easing function is already applied)*
+progress       | Number     | Number between 0 and 1 showing current progress of the tween
 
 ```javascript
 var settings = {
-    onUpdate: function(target, tween, easedProgress){
+    onUpdate: function(target, tween, easedProgress, progress){
         // onUpdate callback code
     }
 }
