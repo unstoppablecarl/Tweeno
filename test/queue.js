@@ -1,5 +1,5 @@
-// 'use strict';
-var assert = require("chai").assert,
+
+var assert = require('chai').assert,
     Tween = require('../src/tween.js'),
     Queue = require('../src/queue.js');
 
@@ -174,8 +174,6 @@ describe('Queue', function() {
     });
 
     describe('start()', function() {
-        var list = new Queue(),
-            t = new Tween({});
 
         it("starts all tweens", function() {
             var tween1Started = false,

@@ -520,6 +520,7 @@ var Tween = function(object, settings) {
 
     this.duration = settings.duration || 1000;
     this.repeat = settings.repeat || 0;
+    this.repeatDelay = settings.repeatDelay || 0;
     this.delay = settings.delay || 0;
     this.from = settings.from || false;
     this.to = settings.to || {};
@@ -603,7 +604,7 @@ Tween.prototype.update = function(time) {
     }
     if(this._onStartCallbackFired === false) {
         if(this.onStart) {
-            this.onStart(this._object, this, 0);
+            this.onStart(this._object, this, 0, 0);
         }
         this._onStartCallbackFired = true;
     }
@@ -639,7 +640,7 @@ Tween.prototype.update = function(time) {
     }
 
     if(this.onUpdate) {
-        this.onUpdate(this._object, this, easedProgress);
+        this.onUpdate(this._object, this, easedProgress, elapsed);
     }
 
     if(elapsed == 1) {
@@ -655,7 +656,7 @@ Tween.prototype.update = function(time) {
                     this.to[property] = tmp;
                     this._reversed = !this._reversed;
                     if(this.onYoYo){
-                        this.onYoYo(this._object, this, 1);
+                        this.onYoYo(this._object, this, 1, 1);
                     }
                 }
                 this._valuesStart[property] = this._valuesStartRepeat[property];
@@ -663,15 +664,15 @@ Tween.prototype.update = function(time) {
                     this.filters[property].start(this._valuesStart[property], this.to[property]);
                 }
             }
-            this._startTime = time + this.delay;
+            this._startTime = time + this.repeatDelay;
             if(this.onRepeat){
-                this.onRepeat(this._object, this, 1);
+                this.onRepeat(this._object, this, 1, 1);
             }
             return true;
         } else {
             if(this._onCompleteCallbackFired === false) {
                 if(this.onComplete) {
-                    this.onComplete(this._object, this, 1);
+                    this.onComplete(this._object, this, 1, 1);
                 }
                 this._onCompleteCallbackFired = true;
             }
@@ -682,7 +683,12 @@ Tween.prototype.update = function(time) {
 };
 
 Tween.prototype.getDuration = function() {
-    return (this.delay + this.duration) * (this.repeat || 1);
+    var repeatDelay = 0;
+    if(this.repeat){
+        repeatDelay = this.repeatDelay;
+    }
+
+    return this.delay + (repeatDelay + this.duration) * (this.repeat || 1);
 };
 
 module.exports = Tween;

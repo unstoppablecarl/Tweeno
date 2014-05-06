@@ -152,9 +152,11 @@ Tween objects manage the state of a `target` object over a span of time.
           x: 100,
           y: 10
       },
+      delay: 10,
       duration: 500,
+      repeatDelay: 15,
       repeat: 4,
-      delay: 10
+
       yoyo: true,
 
       easing: Tweeno.Easing.Elastic.InOut,
@@ -182,9 +184,10 @@ Name           | Type       | Default                        | Description
 ---------------|------------|--------------------------------|-----------------------------------------------
 from           | Object     | `{}`                           | Starting state applied to the target when the tween starts *(when tween.start() is called)*
 to             | Object     | `{}`                           | Ending target state to be tweened to
+delay          | Number     | `0`                            | Delay in milliseconds *(when `repeat` is set, only the first cycle is affected)*
 duration       | Number     | `1000`                         | Tween duration in milliseconds
+repeatDelay    | Number     | `0`                            | Delay in milliseconds *(when `repeat` is set, every cycle after the first is affected)*
 repeat         | Number     | `false`                        | Number of times to repeat the tween
-delay          | Number     | `0`                            | Delay in milliseconds *(delays every repeat when `repeat` is set to a number)*
 yoyo           | Bool       | `false`                        | Reverses the tween every other repeat cycle starting with the second cylce *(requires `repeat` to be set)*
 easing         | Function   | `Tweeno.Easing.None`           | Easing function, available in Tweeno.Easing *(see list below)*
 interpolation  | Function   | `Tweeno.Interpolation.Linear`  | Interpolation function, available in Tween.Interpolation. *(see list below)*
@@ -389,7 +392,8 @@ Filters allow Tween objects to tween the numeric values within a string.
 ```javascript
 var settings = {
       placeholder: '%',
-      format: 'rgba(%,%,%,%)'
+      format: 'rgba(%,%,%,%)',
+      placeholderTypes: ['int', 'int', 'int', 'float']
 };
 ```
 
@@ -402,11 +406,11 @@ var filter = new Tweeno.Filter(settings);
 An object containing the settings for the tween object
 
 
-
 Name           | Type       | Default         | Description
 ---------------|------------|-----------------|----------------------------------------------
 placeholder    | String     | `%`             | Placeholder for numeric values within the string
 format         | String     | `rgba(%,%,%,%)` | Format of the string to be filtered with placeholders where numeric values are to be placed
+placeholderTypes | Array    | `['int', 'int', 'int', 'float']` | Array of strings `'int'` or `'float'` specifying the data type of the placeholder values, applied to each placeholder value in order of array index. **example:** `['int', 'int', 'int', 'float']` is equivalent to `rgba(1, 2, 3, 0.75)`
 
 #### Usage
 
@@ -414,7 +418,8 @@ format         | String     | `rgba(%,%,%,%)` | Format of the string to be filte
 var queue = new Queue(),
     filter = new Filter({
         placeholder: '%',
-        format: 'rgba(%,%,%,%)'
+        format: 'rgba(%,%,%,%)',
+        placeholderTypes: ['int', 'int', 'int', 'float']
     }),
     target = {
         color: 'rgba(255,0,0,0)'
@@ -486,6 +491,7 @@ Converts an array of numeric values to a string matching the `format` of the fil
 - Portability of config data via settings object
 - Exposed property values
 - More consistent callbacks with more params passed
+- Flexibility when delaying and repeating
 - Documentation
 - Unit Tests
 

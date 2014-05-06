@@ -58,8 +58,28 @@ describe('Tween', function() {
                 delay: 50,
                 repeat: 3,
             });
-            assert.deepEqual(tween.getDuration(), 450);
+            assert.deepEqual(tween.getDuration(), 350);
         });
+
+        it('with delay and repeatDelay', function() {
+            var tween = new Tween({}, {
+                duration: 100,
+                delay: 125,
+                repeatDelay: 150,
+                repeat: 3,
+            });
+            assert.deepEqual(tween.getDuration(), 875);
+        });
+
+        it('ignore repeatDelay with no repeat', function() {
+            var tween = new Tween({}, {
+                duration: 100,
+                delay: 50,
+                repeatDelay: 150
+            });
+            assert.deepEqual(tween.getDuration(), 150);
+        });
+
     });
 
     describe('start()', function() {
@@ -329,7 +349,7 @@ describe('Tween', function() {
 
         });
 
-        describe('callbacks', function() {
+        describe('Callbacks', function() {
 
             it('onStart()', function() {
                 var counter = 0,
@@ -709,7 +729,7 @@ describe('Tween', function() {
 
         });
 
-        describe('repeat', function() {
+        describe('Repeat', function() {
 
             it('Tween does not repeat by default', function() {
                 var counter = 0,
@@ -742,7 +762,6 @@ describe('Tween', function() {
                 assert.deepEqual(obj.x, 100);
 
             });
-
 
             it('Single repeat happens only once', function() {
                 var counter = 0,
@@ -780,6 +799,97 @@ describe('Tween', function() {
 
             });
 
+            it('Delay', function() {
+                var obj = {
+                        x: 0
+                    },
+                    settings = {
+                        to: {
+                            x: 100
+                        },
+                        duration: 100,
+                        delay: 50,
+                        repeat: 1,
+                    },
+                    tween = new Tween(obj, settings);
+
+                tween.start(0);
+
+                tween.update(0);
+                assert.deepEqual(obj.x, 0);
+
+                tween.update(50);
+                assert.deepEqual(obj.x, 0);
+
+                tween.update(100);
+                assert.deepEqual(obj.x, 50);
+
+                tween.update(150);
+                assert.deepEqual(obj.x, 100);
+
+                tween.update(200);
+                assert.deepEqual(obj.x, 50);
+
+                tween.update(250);
+                assert.deepEqual(obj.x, 100);
+            });
+
+            it('Delay and repeatDelay', function() {
+                var obj = {
+                        x: 0
+                    },
+                    settings = {
+                        to: {
+                            x: 100
+                        },
+                        duration: 100,
+                        delay: 50,
+                        repeatDelay: 25,
+                        repeat: 2,
+                    },
+                    tween = new Tween(obj, settings);
+
+                tween.start(0);
+
+                tween.update(0);
+                assert.deepEqual(obj.x, 0);
+
+                tween.update(50);
+                assert.deepEqual(obj.x, 0);
+
+                tween.update(100);
+                assert.deepEqual(obj.x, 50);
+
+                tween.update(150);
+                assert.deepEqual(obj.x, 100);
+
+                tween.update(200);
+                assert.deepEqual(obj.x, 25);
+
+                tween.update(250);
+                assert.deepEqual(obj.x, 75);
+
+                tween.update(275);
+                assert.deepEqual(obj.x, 100);
+
+                tween.update(300);
+                assert.deepEqual(obj.x, 0);
+
+                tween.update(325);
+                assert.deepEqual(obj.x, 25);
+
+                tween.update(350);
+                assert.deepEqual(obj.x, 50);
+
+                tween.update(375);
+                assert.deepEqual(obj.x, 75);
+
+                tween.update(400);
+                assert.deepEqual(obj.x, 100);
+
+            });
+
+
             it('Infinity repeat happens forever', function() {
                 var obj = {
                     x: 0
@@ -816,9 +926,9 @@ describe('Tween', function() {
             });
         });
 
-        describe('yoyo', function() {
+        describe('Yoyo', function() {
 
-            it('repeat 1 happens once', function() {
+            it('Repeat 1 happens once', function() {
                 var queue = new Queue(),
                     obj = {
                         x: 0
@@ -854,7 +964,7 @@ describe('Tween', function() {
                 assert.deepEqual(obj.x, 0);
             });
 
-            it('repeat Infinity happens forever', function() {
+            it('Repeat infinity happens forever', function() {
                 var queue = new Queue(),
                     obj = {
                         x: 0
@@ -893,7 +1003,7 @@ describe('Tween', function() {
         });
     });
 
-    describe('interpolation', function() {
+    describe('Interpolation', function() {
         it('default', function() {
             var obj = {
                 x: 0,
@@ -932,7 +1042,7 @@ describe('Tween', function() {
             test(100);
         });
     });
-    describe('filter', function() {
+    describe('Filter', function() {
         it('default', function() {
             var list = new Queue(),
                 obj = {
@@ -1127,7 +1237,7 @@ describe('Tween', function() {
         });
     });
 
-     describe('chained', function() {
+     describe('Chained', function() {
         it('chain one tween', function() {
             var queue = new Queue(),
                 tweenStarted = false,

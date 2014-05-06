@@ -1,0 +1,9 @@
+{
+  "laxbreak": true,
+  "node": true,
+  "unused": true,
+  "globals": {
+    "describe": true,
+    "it": true
+  }
+}

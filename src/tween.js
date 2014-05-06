@@ -38,6 +38,7 @@ var Tween = function(object, settings) {
 
     this.duration = settings.duration || 1000;
     this.repeat = settings.repeat || 0;
+    this.repeatDelay = settings.repeatDelay || 0;
     this.delay = settings.delay || 0;
     this.from = settings.from || false;
     this.to = settings.to || {};
@@ -181,7 +182,7 @@ Tween.prototype.update = function(time) {
                     this.filters[property].start(this._valuesStart[property], this.to[property]);
                 }
             }
-            this._startTime = time + this.delay;
+            this._startTime = time + this.repeatDelay;
             if(this.onRepeat){
                 this.onRepeat(this._object, this, 1, 1);
             }
@@ -200,7 +201,12 @@ Tween.prototype.update = function(time) {
 };
 
 Tween.prototype.getDuration = function() {
-    return (this.delay + this.duration) * (this.repeat || 1);
+    var repeatDelay = 0;
+    if(this.repeat){
+        repeatDelay = this.repeatDelay;
+    }
+
+    return this.delay + (repeatDelay + this.duration) * (this.repeat || 1);
 };
 
 module.exports = Tween;

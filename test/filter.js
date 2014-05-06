@@ -1,7 +1,5 @@
-var assert = require("assert"),
-    Tween = require('../src/tween.js'),
-    Queue = require('../src/queue.js'),
-    Easing = require('../src/easing.js'),
+'use strict';
+var assert = require('chai').assert,
     Interpolation = require('../src/interpolation.js'),
     Filter = require('../src/filter.js');
 
@@ -26,14 +24,18 @@ describe('Filter', function() {
         var runTestData = function(filter, testData){
             for (var i = 0; i < testData.length; i++) {
                 var str = testData[i].str,
-                    arr = testData[i].arr;
-                assert.deepEqual(filter.stringToArray(str), arr);
+                    arr = testData[i].arr,
+                    actual = filter.stringToArray(str).map(String),
+                    expected = arr.map(String);
+                // convert to string to avoid floating point inequalities
+                assert.deepEqual(actual, expected);
             }
         };
 
         it('default', function() {
             var settings = {
-                    format: 'test(%,%,%, %)'
+                    format: 'test(%,%,%, %)',
+                    placeholderTypes: ['float', 'float', 'float', 'float'],
                 },
                 f = new Filter(settings),
                 testData = [
@@ -122,25 +124,24 @@ describe('Filter', function() {
                     format: 'test(%,%,%,%)',
                     placeholderTypes: ['float', 'float', 'float', 'float'],
                 },
-                f = new Filter(settings);
-
-            testData = [
-                {
-                    str: 'test(1,2,3,4)',
-                    arr: [1, 2, 3, 4]
-                },
-                {
-                    str: 'test(10,200,3000,40000)',
-                    arr: [10, 200, 3000, 40000]
-                },
-                {
-                    str: 'test(1.1,2.2,3.3,4.4)',
-                    arr: [1.1, 2.2, 3.3, 4.4]
-                },{
-                    str: 'test(-1,-2.2,20.02,0)',
-                    arr: [-1, -2.2, 20.02, -0]
-                }
-            ];
+                f = new Filter(settings),
+                testData = [
+                    {
+                        str: 'test(1,2,3,4)',
+                        arr: [1, 2, 3, 4]
+                    },
+                    {
+                        str: 'test(10,200,3000,40000)',
+                        arr: [10, 200, 3000, 40000]
+                    },
+                    {
+                        str: 'test(1.1,2.2,3.3,4.4)',
+                        arr: [1.1, 2.2, 3.3, 4.4]
+                    },{
+                        str: 'test(-1,-2.2,20.02,0)',
+                        arr: [-1, -2.2, 20.02, -0]
+                    }
+                ];
             runTestData(f, testData);
         });
 
@@ -197,7 +198,59 @@ describe('Filter', function() {
         });
     });
 
-    describe('validation', function() {
+    describe('getUpdatedValue()', function() {
+
+        it('default', function() {
+            var filter = new Filter(settings),
+                from = 'rbga(10,20,30,1)',
+                to = 'rgba(20,30,40,1)';
+
+            filter.start(from, to);
+
+            var easedProgress = 0.5,
+                interpolation = Interpolation.Linear;
+            var out = filter.getUpdatedValue(easedProgress, interpolation);
+            assert.deepEqual(out, 'rgba(15,25,35,1)');
+        });
+
+        it('interpolated', function() {
+            var filter = new Filter(settings),
+                from = 'rbga(0,0,0,0)',
+                to = ['rbga(1,2,3,1)', 'rgba(10,20,30,1)', 'rgba(15,-25,35,1)'];
+
+            filter.start(from, to);
+
+
+            var interpolation = Interpolation.Linear;
+
+            var getExpected = function(easedProgress){
+                return [
+                    interpolation([0,1,10,15], easedProgress),
+                    interpolation([0,2,20,-25], easedProgress),
+                    interpolation([0,3,30,35], easedProgress),
+                    interpolation([0,1,1,1], easedProgress)
+                ];
+            };
+
+            var easedProgress = 0.50,
+                expected = getExpected(easedProgress),
+                out = filter.getUpdatedValue(easedProgress, interpolation),
+                outArr = filter.stringToArray(out);
+
+            assert.deepEqual(outArr, expected);
+
+            filter.start(from, to);
+            easedProgress = 0.85;
+            expected = getExpected(easedProgress);
+            out = filter.getUpdatedValue(easedProgress, interpolation);
+            outArr = filter.stringToArray(out);
+
+            assert.deepEqual(outArr, expected);
+
+        });
+    });
+
+    describe('Validation', function() {
         var exLength = false,
             exString = false,
             exParam = false,
@@ -224,8 +277,7 @@ describe('Filter', function() {
 
         it('validateArrayLength()', function() {
             var filter = new Filter(settings),
-                from = 'rbga(1,2,3,1)',
-                to = 'rgba(10,20,30,1)';
+                from = 'rbga(1,2,3,1)';
 
             watchValidateFunction(filter);
             resetValidateVars();
@@ -360,7 +412,7 @@ describe('Filter', function() {
 
     });
 
-    describe('conversion', function() {
+    describe('Conversion', function() {
 
         it('getIndexedInterpolationData', function() {
             var filter = new Filter(settings);
@@ -383,7 +435,7 @@ describe('Filter', function() {
         });
     });
 
-    describe('start', function() {
+    describe('Start', function() {
 
         it('default', function() {
             var filter = new Filter(settings),
@@ -429,56 +481,6 @@ describe('Filter', function() {
 
     });
 
-    describe('getUpdatedValue', function() {
 
-        it('default', function() {
-            var filter = new Filter(settings),
-                from = 'rbga(10,20,30,1)',
-                to = 'rgba(20,30,40,1)';
-
-            filter.start(from, to);
-
-            var easedProgress = 0.5,
-                interpolation = Interpolation.Linear;
-            var out = filter.getUpdatedValue(easedProgress, interpolation);
-            assert.deepEqual(out, 'rgba(15,25,35,1)');
-        });
-
-        it('interpolated', function() {
-            var filter = new Filter(settings),
-                from = 'rbga(0,0,0,0)',
-                to = ['rbga(1,2,3,1)', 'rgba(10,20,30,1)', 'rgba(15,-25,35,1)'];
-
-            filter.start(from, to);
-
-
-            var interpolation = Interpolation.Linear;
-
-            var getExpected = function(easedProgress){
-                return [
-                    interpolation([0,1,10,15], easedProgress),
-                    interpolation([0,2,20,-25], easedProgress),
-                    interpolation([0,3,30,35], easedProgress),
-                    interpolation([0,1,1,1], easedProgress)
-                ];
-            };
-
-            var easedProgress = 0.50,
-                expected = getExpected(easedProgress),
-                out = filter.getUpdatedValue(easedProgress, interpolation),
-                outArr = filter.stringToArray(out);
-
-            assert.deepEqual(outArr, expected);
-
-            filter.start(from, to);
-            easedProgress = 0.85;
-            expected = getExpected(easedProgress);
-            out = filter.getUpdatedValue(easedProgress, interpolation);
-            outArr = filter.stringToArray(out);
-
-            assert.deepEqual(outArr, expected);
-
-        });
-    });
 
 });
